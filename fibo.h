@@ -14,7 +14,7 @@ public:
 
     Fibo(const Fibo &fibo);
 
-    [[nodiscard]] size_t length() const;
+    size_t length() const;
 
     void operator+=(const Fibo &fibo);
 

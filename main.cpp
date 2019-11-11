@@ -6,19 +6,7 @@
 using  namespace std;
 
 int main() {
-    string aa, bb;
-    cin >> aa >> bb;
-    Fibo a = Fibo(aa);
-    Fibo b = Fibo(bb);
-
-    cout << a << endl << b << endl << endl;
-
-    a += b;
-    cout << a << endl << b << endl;
-    cout << b + Zero() << endl;
-    return 0;
-
-    /*Fibo f;
+    Fibo f;
 
     assert(f == Zero());
     assert(Fibo(f) == Zero());
@@ -44,5 +32,5 @@ int main() {
 
     assert(Fibo("11").length() == 3); // 11 == 100
 
-    std::cout << Fibo("11") << std::endl; // prints 100*/
+    std::cout << Fibo("11") << std::endl; // prints 100
 }

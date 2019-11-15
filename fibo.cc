@@ -145,44 +145,41 @@ Fibo::Fibo(const std::string &str) : mask(str) {
     normalize(mask);
 }
 
-Fibo::Fibo(const Fibo &fibo) : mask(fibo.mask) {}
-
 size_t Fibo::length() const {
     return mask.size();
 }
 
-void Fibo::operator+=(const Fibo &fibo) {
+// TODO f += f jeszcze nie działa
+Fibo &Fibo::operator+=(const Fibo &fibo) {
     size_t length = fibo.length();
     for (size_t i = 0; i < length; i++) {
         if (fibo.mask[i]) {
             addSingleByte(this->mask, i);
         }
     }
+
+    return *this;
 }
 
-void Fibo::operator&=(const Fibo &fibo) {
+// TODO upewnić się, że f &= f działa
+Fibo &Fibo::operator&=(const Fibo &fibo) {
     size_t length = min(this->length(), fibo.length());
     for (size_t i = 0; i < length; i++) {
         this->mask[i] &= fibo.mask[i];
     }
     this->mask.resize(length);
     eraseLeadingZeros(this->mask);
+
+    return *this;
 }
 
-void Fibo::operator=(const Fibo &fibo) {
-    this->mask = fibo.mask;
+// TODO ide podpowiada, aby wywalić const ale w czytankach było aby dać consty
+const Fibo operator+(const Fibo &fibo1, const Fibo &fibo2) {
+    return Fibo(fibo1) += fibo2;
 }
 
-Fibo operator+(const Fibo &fibo1, const Fibo &fibo2) {
-    Fibo res(fibo1);
-    res += fibo2;
-    return res;
-}
-
-Fibo operator&(const Fibo &fibo1, const Fibo &fibo2) {
-    Fibo res(fibo1);
-    res &= fibo2;
-    return res;
+const Fibo operator&(const Fibo &fibo1, const Fibo &fibo2) {
+    return Fibo(fibo1) &= fibo2;
 }
 
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo) {

@@ -138,25 +138,6 @@ namespace {
             normalizeOnPosition(mask, 0);
         }
     }
-
-    //TODO using type dla dynamic_bitset?
-    int compare(const dynamic_bitset<> &mask1, const dynamic_bitset<> &mask2) {
-        if (mask1.size() > mask2.size()) {
-            return 1;
-        } else if (mask1.size() < mask2.size()) {
-            return -1;
-        }
-        int length = min(mask1.size(), mask2.size());
-        for (size_t i = 0; i < length; i++) {
-            if (mask1[i] && !mask2[i])
-                return 1;
-            else if (mask1[i] && mask2[i]) {
-                return -1;
-            }
-        }
-        return 0;
-    }
-
 }
 
 Fibo::Fibo() : mask(1, false) {}
@@ -164,7 +145,6 @@ Fibo::Fibo() : mask(1, false) {}
 Fibo::Fibo(const std::string &str) : mask(str) {
     normalize(mask);
 }
-
 
 // TODO generowane w stalej pamieci, ale za kazdym razem generuje potrzebne liczby Fibonacciego
 Fibo::Fibo(unsigned int n) : mask(1, false) {
@@ -210,7 +190,6 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
             addSingleByte(this->mask, i);
         }
     }
-
     return *this;
 }
 
@@ -255,29 +234,22 @@ Fibo &Fibo::operator<<=(unsigned int n) {
 }
 
 // TODO ide podpowiada, aby wywalić const ale w czytankach było aby dać consty
-const Fibo operator+(const Fibo &fibo1, const Fibo &fibo2) {
+/*const Fibo operator+(const Fibo &fibo1, const Fibo &fibo2) {
     return Fibo(fibo1) += fibo2;
+}*/
+
+bool operator<(Fibo const& fibo1, Fibo const& fibo2) {
+    if (fibo1.length() < fibo2.length())
+        return true;
+    else if (fibo1.length() > fibo2.length())
+        return false;
+    return (fibo1.mask < fibo2.mask);
 }
 
-//TODO
-bool operator<(const Fibo &fibo1, const Fibo &fibo2) {
-    return false; //(compare(fibo1.mask, fibo2.mask) == -1?true:false);
-}
-
-const Fibo operator&(const Fibo &fibo1, const Fibo &fibo2) {
-    return Fibo(fibo1) &= fibo2;
-}
-
-const Fibo operator|(const Fibo &fibo1, const Fibo &fibo2) {
-    return Fibo(fibo1) |= fibo2;
-}
-
-const Fibo operator^(const Fibo &fibo1, const Fibo &fibo2) {
-    return Fibo(fibo1) ^= fibo2;
-}
-
-const Fibo operator<<(const Fibo &fibo, unsigned int n) {
-    return Fibo(fibo) <<= n;
+bool operator==(Fibo const& fibo1, Fibo const& fibo2) {
+    if (fibo1.length() != fibo2.length())
+        return false;
+    return (fibo1.mask == fibo2.mask);
 }
 
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo) {

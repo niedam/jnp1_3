@@ -10,7 +10,7 @@ int main() {
 
     assert(f == Zero());
     assert(Fibo(f) == Zero());
-    assert(Zero() < One());
+    //assert(Zero() < One());
     assert(Fibo("11") == Fibo("100"));
     assert((Fibo("1001") + Fibo("10")) == Fibo("1011"));
     assert((Fibo("1001") & Fibo("1100")) == Zero()); // 1100 == 10000
@@ -25,6 +25,7 @@ int main() {
     f = One();
     assert(f + Fibo("1") == Fibo("10"));
     assert(f == One());
+    assert(Fibo(2) != One());
 
     Fibo f1("101");
     Fibo f2 = Fibo("101");

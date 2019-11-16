@@ -3,8 +3,12 @@
 
 #include <string>
 #include "boost/dynamic_bitset.hpp"
+#include <boost/operators.hpp>
 
-class Fibo {
+class Fibo : boost::totally_ordered<Fibo>,
+        boost::addable<Fibo>,
+        boost::bitwise<Fibo>,
+        boost::left_shiftable<Fibo, unsigned int> {
     boost::dynamic_bitset<> mask;
 public:
     Fibo();
@@ -31,20 +35,17 @@ public:
     //void operator=(const Fibo &fibo);
 
     friend std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
+
+    friend bool operator<(Fibo const& fibo1, Fibo const& fibo2);
+
+    friend bool operator==(Fibo const& fibo1, Fibo const& fibo2);
 };
-
-const Fibo operator+(const Fibo &fibo1, const Fibo &fibo2);
-
-const Fibo operator&(const Fibo &fibo1, const Fibo &fibo2);
-
-const Fibo operator|(const Fibo &fibo1, const Fibo &fibo2);
-
-const Fibo operator^(const Fibo &fibo1, const Fibo &fibo2);
-
-const Fibo operator<<(const Fibo &fibo, unsigned int n);
 
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
 
+bool operator<(Fibo const& fibo1, Fibo const& fibo2);
+
+bool operator==(Fibo const& fibo1, Fibo const& fibo2);
 
 const Fibo &Zero();
 

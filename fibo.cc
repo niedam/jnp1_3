@@ -2,6 +2,7 @@
 
 using boost::dynamic_bitset;
 using std::min;
+using std::max;
 
 namespace {
     /** @brief Erases leading zeros from bitset.
@@ -137,6 +138,25 @@ namespace {
             normalizeOnPosition(mask, 0);
         }
     }
+
+    //TODO using type dla dynamic_bitset?
+    int compare(const dynamic_bitset<> &mask1, const dynamic_bitset<> &mask2) {
+        if (mask1.size() > mask2.size()) {
+            return 1;
+        } else if (mask1.size() < mask2.size()) {
+            return -1;
+        }
+        int length = min(mask1.size(), mask2.size());
+        for (size_t i = 0; i < length; i++) {
+            if (mask1[i] && !mask2[i])
+                return 1;
+            else if (mask1[i] && mask2[i]) {
+                return -1;
+            }
+        }
+        return 0;
+    }
+
 }
 
 Fibo::Fibo() : mask(1, false) {}
@@ -144,6 +164,39 @@ Fibo::Fibo() : mask(1, false) {}
 Fibo::Fibo(const std::string &str) : mask(str) {
     normalize(mask);
 }
+
+
+// TODO generowane w stalej pamieci, ale za kazdym razem generuje potrzebne liczby Fibonacciego
+Fibo::Fibo(unsigned int n) : mask(1, false) {
+    int x = 1, y = 1, z;
+    int id_x = 0;
+    while (y > 0 && y < n) {
+        z = x + y;
+        x = y;
+        y = z;
+        id_x++;
+    }
+    if (n > 0) {
+        if (y == n) {
+            mask.resize(id_x + 1);
+            mask[id_x] = true;
+        } else {
+            mask.resize(id_x);
+            while (n > 0) {
+                mask[id_x - 1] = true;
+                n -= x;
+                while (x > n) {
+                    z = y - x;
+                    y = x;
+                    x = z;
+                    id_x--;
+                }
+            }
+        }
+    }
+}
+
+Fibo::Fibo(const Fibo &fibo) : mask(fibo.mask) {}
 
 size_t Fibo::length() const {
     return mask.size();
@@ -161,6 +214,17 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
     return *this;
 }
 
+Fibo &Fibo::operator|=(const Fibo &fibo) {
+    size_t length_fibo = fibo.length();
+    size_t length_max = std::max(this->length(), length_fibo);
+    this->mask.resize(length_max);
+    for (size_t i = 0; i < length_fibo; i++) {
+        this->mask[i] |= fibo.mask[i];
+    }
+    normalize(mask);
+    return *this;
+}
+
 // TODO upewnić się, że f &= f działa
 Fibo &Fibo::operator&=(const Fibo &fibo) {
     size_t length = min(this->length(), fibo.length());
@@ -173,13 +237,47 @@ Fibo &Fibo::operator&=(const Fibo &fibo) {
     return *this;
 }
 
+Fibo &Fibo::operator^=(const Fibo &fibo) {
+    size_t length_fibo = fibo.length();
+    size_t length_max = std::max(this->length(), length_fibo);
+    this->mask.resize(length_max);
+    for (size_t i = 0; i < length_fibo; i++) {
+        this->mask[i] ^= fibo.mask[i];
+    }
+    normalize(mask);
+    return *this;
+}
+
+Fibo &Fibo::operator<<=(unsigned int n) {
+    this->mask.resize(this->mask.size() + n);
+    this->mask <<= n;
+    return *this;
+}
+
 // TODO ide podpowiada, aby wywalić const ale w czytankach było aby dać consty
 const Fibo operator+(const Fibo &fibo1, const Fibo &fibo2) {
     return Fibo(fibo1) += fibo2;
 }
 
+//TODO
+bool operator<(const Fibo &fibo1, const Fibo &fibo2) {
+    return false; //(compare(fibo1.mask, fibo2.mask) == -1?true:false);
+}
+
 const Fibo operator&(const Fibo &fibo1, const Fibo &fibo2) {
     return Fibo(fibo1) &= fibo2;
+}
+
+const Fibo operator|(const Fibo &fibo1, const Fibo &fibo2) {
+    return Fibo(fibo1) |= fibo2;
+}
+
+const Fibo operator^(const Fibo &fibo1, const Fibo &fibo2) {
+    return Fibo(fibo1) ^= fibo2;
+}
+
+const Fibo operator<<(const Fibo &fibo, unsigned int n) {
+    return Fibo(fibo) <<= n;
 }
 
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo) {
@@ -189,5 +287,10 @@ std::ostream &operator<<(std::ostream &os, const Fibo &fibo) {
 
 const Fibo &Zero() {
     static Fibo *fibo = new Fibo();
+    return *fibo;
+}
+
+const Fibo &One() {
+    static Fibo *fibo = new Fibo(1);
     return *fibo;
 }

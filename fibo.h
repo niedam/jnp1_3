@@ -11,14 +11,21 @@ public:
 
     explicit Fibo(const std::string &str);
 
-    // Implicit declaration
-    //Fibo(const Fibo &fibo);
+    explicit Fibo(unsigned int n);
+
+    Fibo(const Fibo &fibo);
 
     [[nodiscard]] size_t length() const;
 
     Fibo &operator+=(const Fibo &fibo);
 
     Fibo &operator&=(const Fibo &fibo);
+
+    Fibo &operator|=(const Fibo &fibo);
+
+    Fibo &operator^=(const Fibo &fibo);
+
+    Fibo &operator<<=(unsigned int n);
 
     // Implicit declaration
     //void operator=(const Fibo &fibo);
@@ -30,8 +37,17 @@ const Fibo operator+(const Fibo &fibo1, const Fibo &fibo2);
 
 const Fibo operator&(const Fibo &fibo1, const Fibo &fibo2);
 
+const Fibo operator|(const Fibo &fibo1, const Fibo &fibo2);
+
+const Fibo operator^(const Fibo &fibo1, const Fibo &fibo2);
+
+const Fibo operator<<(const Fibo &fibo, unsigned int n);
+
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
 
+
 const Fibo &Zero();
+
+const Fibo &One();
 
 #endif //FIBO_H

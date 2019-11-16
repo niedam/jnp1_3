@@ -33,5 +33,9 @@ int main() {
 
     assert(Fibo("11").length() == 3); // 11 == 100
 
+    f1 += 2;
+    f2 = Fibo("1001");
+    assert(f1 > 3);
+
     std::cout << Fibo("11") << std::endl; // prints 100
 }

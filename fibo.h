@@ -15,9 +15,10 @@ public:
 
     explicit Fibo(const std::string &str);
 
-    explicit Fibo(unsigned int n);
+    Fibo(unsigned int n);
 
-    Fibo(const Fibo &fibo);
+    // Implicit declaration
+    //Fibo(const Fibo &fibo);
 
     [[nodiscard]] size_t length() const;
 

@@ -176,7 +176,7 @@ Fibo::Fibo(unsigned int n) : mask(1, false) {
     }
 }
 
-Fibo::Fibo(const Fibo &fibo) : mask(fibo.mask) {}
+//Fibo::Fibo(const Fibo &fibo) : mask(fibo.mask) {}
 
 size_t Fibo::length() const {
     return mask.size();
@@ -238,6 +238,7 @@ Fibo &Fibo::operator<<=(unsigned int n) {
     return Fibo(fibo1) += fibo2;
 }*/
 
+// TODO operatory sa dziedziczone z boosta na podstawie odpowiednich metod, z czytanek nieobowiazkowych
 bool operator<(Fibo const& fibo1, Fibo const& fibo2) {
     if (fibo1.length() < fibo2.length())
         return true;

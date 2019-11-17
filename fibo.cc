@@ -156,27 +156,23 @@ Fibo::Fibo(unsigned int n) : mask(1, false) {
         y = z;
         id_x++;
     }
-    if (n > 0) {
-        if (y == n) {
-            mask.resize(id_x + 1);
-            mask[id_x] = true;
-        } else {
-            mask.resize(id_x);
-            while (n > 0) {
-                mask[id_x - 1] = true;
-                n -= x;
-                while (x > n) {
-                    z = y - x;
-                    y = x;
-                    x = z;
-                    id_x--;
-                }
+    if (y == n) {
+        mask.resize(id_x + 1);
+        mask[id_x] = true;
+    } else if (n != 0) {
+        mask.resize(id_x);
+        while (n > 0) {
+            mask[id_x - 1] = true;
+            n -= x;
+            while (x > n) {
+                z = y - x;
+                y = x;
+                x = z;
+                id_x--;
             }
         }
     }
 }
-
-//Fibo::Fibo(const Fibo &fibo) : mask(fibo.mask) {}
 
 size_t Fibo::length() const {
     return mask.size();
@@ -184,7 +180,7 @@ size_t Fibo::length() const {
 
 // TODO f += f jeszcze nie działa
 Fibo &Fibo::operator+=(const Fibo &fibo) {
-    size_t length = fibo.length();
+    size_t length = fibo.mask.size();
     for (size_t i = 0; i < length; i++) {
         if (fibo.mask[i]) {
             addSingleByte(this->mask, i);
@@ -194,9 +190,9 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
 }
 
 Fibo &Fibo::operator|=(const Fibo &fibo) {
-    size_t length_fibo = fibo.length();
-    size_t length_max = std::max(this->length(), length_fibo);
-    this->mask.resize(length_max);
+    size_t length_fibo = fibo.mask.size();
+    size_t length_max = max(this->mask.size(), length_fibo);
+    this->mask.resize(length_max); // TODO zapytac p. Peczarskiego
     for (size_t i = 0; i < length_fibo; i++) {
         this->mask[i] |= fibo.mask[i];
     }
@@ -206,7 +202,7 @@ Fibo &Fibo::operator|=(const Fibo &fibo) {
 
 // TODO upewnić się, że f &= f działa
 Fibo &Fibo::operator&=(const Fibo &fibo) {
-    size_t length = min(this->length(), fibo.length());
+    size_t length = min(this->mask.size(), fibo.mask.size());
     for (size_t i = 0; i < length; i++) {
         this->mask[i] &= fibo.mask[i];
     }
@@ -217,8 +213,8 @@ Fibo &Fibo::operator&=(const Fibo &fibo) {
 }
 
 Fibo &Fibo::operator^=(const Fibo &fibo) {
-    size_t length_fibo = fibo.length();
-    size_t length_max = std::max(this->length(), length_fibo);
+    size_t length_fibo = fibo.mask.size();
+    size_t length_max = max(this->mask.size(), length_fibo);
     this->mask.resize(length_max);
     for (size_t i = 0; i < length_fibo; i++) {
         this->mask[i] ^= fibo.mask[i];
@@ -233,22 +229,17 @@ Fibo &Fibo::operator<<=(unsigned int n) {
     return *this;
 }
 
-// TODO ide podpowiada, aby wywalić const ale w czytankach było aby dać consty
-/*const Fibo operator+(const Fibo &fibo1, const Fibo &fibo2) {
-    return Fibo(fibo1) += fibo2;
-}*/
-
 // TODO operatory sa dziedziczone z boosta na podstawie odpowiednich metod, z czytanek nieobowiazkowych
-bool operator<(Fibo const& fibo1, Fibo const& fibo2) {
-    if (fibo1.length() < fibo2.length())
+bool operator<(Fibo const &fibo1, Fibo const &fibo2) {
+    if (fibo1.mask.size() < fibo2.mask.size())
         return true;
-    else if (fibo1.length() > fibo2.length())
+    else if (fibo1.mask.size() > fibo2.mask.size())
         return false;
     return (fibo1.mask < fibo2.mask);
 }
 
-bool operator==(Fibo const& fibo1, Fibo const& fibo2) {
-    if (fibo1.length() != fibo2.length())
+bool operator==(Fibo const &fibo1, Fibo const &fibo2) {
+    if (fibo1.mask.size() != fibo2.mask.size())
         return false;
     return (fibo1.mask == fibo2.mask);
 }

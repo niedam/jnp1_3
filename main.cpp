@@ -37,5 +37,8 @@ int main() {
     f2 = Fibo("1001");
     assert(f1 > 3);
 
+    Fibo f0(0);
+    cout << f0.length() << ' ' << f0 << '\n';
+
     std::cout << Fibo("11") << std::endl; // prints 100
 }

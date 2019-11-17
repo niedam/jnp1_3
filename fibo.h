@@ -37,16 +37,16 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
 
-    friend bool operator<(Fibo const& fibo1, Fibo const& fibo2);
+    friend bool operator<(Fibo const &fibo1, Fibo const &fibo2);
 
-    friend bool operator==(Fibo const& fibo1, Fibo const& fibo2);
+    friend bool operator==(Fibo const &fibo1, Fibo const &fibo2);
 };
 
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
 
-bool operator<(Fibo const& fibo1, Fibo const& fibo2);
+bool operator<(Fibo const &fibo1, Fibo const &fibo2);
 
-bool operator==(Fibo const& fibo1, Fibo const& fibo2);
+bool operator==(Fibo const &fibo1, Fibo const &fibo2);
 
 const Fibo &Zero();
 

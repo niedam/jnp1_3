@@ -12,13 +12,13 @@ namespace {
         size_t size = mask.size();
 
         // mask is proper Fibonacci number (not normalized) so size > 0.
-        size_t mostSignificantBytePos = size - 1;
-        while (mostSignificantBytePos > 0 && !mask[mostSignificantBytePos]) {
-            mostSignificantBytePos--;
+        size_t mostSignificantBitPos = size - 1;
+        while (mostSignificantBitPos > 0 && !mask[mostSignificantBitPos]) {
+            mostSignificantBitPos--;
         }
 
-        if (mostSignificantBytePos + 1 < size) {
-            mask.resize(mostSignificantBytePos + 1);
+        if (mostSignificantBitPos + 1 < size) {
+            mask.resize(mostSignificantBitPos + 1);
         }
     }
 
@@ -41,17 +41,17 @@ namespace {
             mask[position - 1] = false;
         }
 
-        size_t addBytePos = position + 1;
-        while (addBytePos < size) {
-            if (addBytePos + 1 < size && mask[addBytePos + 1]) {
-                mask[addBytePos + 1] = false;
-                addBytePos += 2;
+        size_t addBitPos = position + 1;
+        while (addBitPos < size) {
+            if (addBitPos + 1 < size && mask[addBitPos + 1]) {
+                mask[addBitPos + 1] = false;
+                addBitPos += 2;
             } else {
-                mask[addBytePos] = true;
+                mask[addBitPos] = true;
                 return;
             }
         }
-        if (addBytePos == size) {
+        if (addBitPos == size) {
             mask.push_back(true);
         }
     }
@@ -75,7 +75,7 @@ namespace {
      * @param mask[in,out]          - given Fibonacci number;
      * @param position[in]          - position described above.
      */
-    void addSingleByte(dynamic_bitset<> &mask, size_t position) {
+    void addSingleBit(dynamic_bitset<> &mask, size_t position) {
         size_t size = mask.size();
         if (size <= position) {
             mask.resize(position + 1);
@@ -122,7 +122,7 @@ namespace {
             mask[position] = false;
         }
 
-        // Now we would like to add byte (change x to (x+1)) on position - 2 but position < 2, so we need to add
+        // Now we would like to add bit (change x to (x+1)) on position - 2 but position < 2, so we need to add
         // f(position - 2 + 2) = f(position) Fibonacci number (index of number in mask is shifted by 2).
 
         // f0 Fibonacci is equal to 0, so we need to add nothing.
@@ -178,14 +178,54 @@ size_t Fibo::length() const {
     return mask.size();
 }
 
-// TODO f += f jeszcze nie działa
 Fibo &Fibo::operator+=(const Fibo &fibo) {
-    size_t length = fibo.mask.size();
-    for (size_t i = 0; i < length; i++) {
-        if (fibo.mask[i]) {
-            addSingleByte(this->mask, i);
+    if (&fibo != this) {
+        size_t length = fibo.mask.size();
+        for (size_t i = 0; i < length; i++) {
+            if (fibo.mask[i]) {
+                addSingleBit(this->mask, i);
+            }
+        }
+        return *this;
+    }
+
+    // Now we have Fibonacci number consisting only of 0's and 2's. No two 2's are directly next to each other.
+    // We will change this into proper Fibonacci number (not yet normalized).
+    // We will recursively change situation "...020x..." into "...100(x+1)...", "...030x..." into "...110(x+1)..."
+    // and "...0120x..." into "...1010x...". One can prove that making these changes we will encounter only
+    // situations that will require those changes.
+    mask.push_back(false);
+    bool addAdditionalBit = false; // Variable that tells that we should add bit on current position (x+1) described above.
+    int position;
+    for (position = mask.size() - 2; position >= 0; position--) {
+        if (mask[position]) {
+            if (mask[position + 1]) {
+                mask[position + 2] = true;
+                mask[position + 1] = false;
+            } else {
+                mask[position + 1] = true;
+                mask[position] = addAdditionalBit;
+                addAdditionalBit = true;
+            }
+
+            // We are guaranteed that there is no '2' on position - 1, so we can decrease variable position.
+            // We have to decrease variable position here because we set
+            // variable addAdditionalBit to true above which would be wrong without this.
+            position--;
+        } else {
+            mask[position] = addAdditionalBit;
+            addAdditionalBit = false;
         }
     }
+
+    normalize(mask);
+
+    // If we have leftover (addAdditionalBit == true) from for above we are adding this here.
+    // mask[-1] would be Fibonacci number F(1) = 1 and mask[-2] would be F(2) = 0.
+    if (addAdditionalBit && position == -1) {
+        addSingleBit(mask, 0);
+    }
+
     return *this;
 }
 
@@ -200,7 +240,6 @@ Fibo &Fibo::operator|=(const Fibo &fibo) {
     return *this;
 }
 
-// TODO upewnić się, że f &= f działa
 Fibo &Fibo::operator&=(const Fibo &fibo) {
     size_t length = min(this->mask.size(), fibo.mask.size());
     for (size_t i = 0; i < length; i++) {

@@ -17,9 +17,6 @@ public:
 
     Fibo(unsigned int n);
 
-    // Implicit declaration
-    //Fibo(const Fibo &fibo);
-
     [[nodiscard]] size_t length() const;
 
     Fibo &operator+=(const Fibo &fibo);
@@ -31,9 +28,6 @@ public:
     Fibo &operator^=(const Fibo &fibo);
 
     Fibo &operator<<=(unsigned int n);
-
-    // Implicit declaration
-    //void operator=(const Fibo &fibo);
 
     friend std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
 

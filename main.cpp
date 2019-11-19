@@ -24,6 +24,8 @@ int main() {
 
     f = One();
 
+    f = 2;
+
     assert(f + Fibo("1") == Fibo("10"));
     assert(f == One());
     assert(Fibo(2) != One());

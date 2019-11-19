@@ -25,7 +25,7 @@ public:
 
     explicit Fibo(long int n);
 
-    explicit Fibo(unsigned long int n);
+    Fibo(unsigned long int n);
 
     explicit Fibo(long long n);
 

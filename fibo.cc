@@ -146,11 +146,24 @@ Fibo::Fibo(const std::string &str) : mask(str) {
     normalize(mask);
 }
 
-// TODO generowane w stalej pamieci, ale za kazdym razem generuje potrzebne liczby Fibonacciego
-Fibo::Fibo(unsigned int n) : mask(1, false) {
-    int x = 1, y = 1, z;
+Fibo::Fibo(short int n) : Fibo((unsigned long long) n) {}
+
+Fibo::Fibo(unsigned short int n) : Fibo((unsigned long long) n) {}
+
+Fibo::Fibo(int n) : Fibo((unsigned long long) n) {}
+
+Fibo::Fibo(unsigned int n) : Fibo((unsigned long long) n) {}
+
+Fibo::Fibo(long int n) : Fibo((unsigned long long) n) {}
+
+Fibo::Fibo(unsigned long int n) : Fibo((unsigned long long) n) {}
+
+Fibo::Fibo(long long n) : Fibo((unsigned long long) n) {}
+
+Fibo::Fibo(unsigned long long n) : mask(1, false) {
+    unsigned long long x = 1, y = 1, z;
     int id_x = 0;
-    while (y > 0 && y < n) {
+    while (x <= y && y < n) {
         z = x + y;
         x = y;
         y = z;
@@ -268,7 +281,6 @@ Fibo &Fibo::operator<<=(unsigned int n) {
     return *this;
 }
 
-// TODO operatory sa dziedziczone z boosta na podstawie odpowiednich metod, z czytanek nieobowiazkowych
 bool operator<(Fibo const &fibo1, Fibo const &fibo2) {
     if (fibo1.mask.size() < fibo2.mask.size())
         return true;
@@ -294,6 +306,6 @@ const Fibo &Zero() {
 }
 
 const Fibo &One() {
-    static Fibo *fibo = new Fibo(1);
+    static Fibo *fibo = new Fibo(1ULL);
     return *fibo;
 }

@@ -23,6 +23,7 @@ int main() {
     assert(f == Fibo("1000"));
 
     f = One();
+
     assert(f + Fibo("1") == Fibo("10"));
     assert(f == One());
     assert(Fibo(2) != One());
@@ -33,12 +34,26 @@ int main() {
 
     assert(Fibo("11").length() == 3); // 11 == 100
 
-    f1 += 2;
+    Fibo f_big(18446744073709551615ULL);
+    cout << f_big << '\n';
+    Fibo f_big2(8 * 1000 * 1000 * 1000LL);
+    cout << f_big2 << '\n';
+
+    //f1 += 2;
     f2 = Fibo("1001");
-    assert(f1 > 3);
 
     Fibo f0(0);
     cout << f0.length() << ' ' << f0 << '\n';
+
+    //NIE POWINNO SIĘ KOMPILOWAĆ
+    /*Fibo f_char;
+    f_char = Fibo((char)'a');
+    f_char = Fibo((char16_t)'a');
+    f_char = Fibo((char32_t)'a');
+    f_char = Fibo((wchar_t)'a');
+    f_char = Fibo((signed char)'a');
+    f_char = Fibo((unsigned char)'a');*/
+
 
     std::cout << Fibo("11") << std::endl; // prints 100
 }

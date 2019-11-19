@@ -2,7 +2,7 @@
 #define FIBO_H
 
 #include <string>
-#include "boost/dynamic_bitset.hpp"
+#include <boost/dynamic_bitset.hpp>
 #include <boost/operators.hpp>
 
 class Fibo : boost::totally_ordered<Fibo>,
@@ -15,7 +15,23 @@ public:
 
     explicit Fibo(const std::string &str);
 
-    Fibo(unsigned int n);
+    explicit Fibo(short int n);
+
+    explicit Fibo(unsigned short int n);
+
+    explicit Fibo(int n);
+
+    explicit Fibo(unsigned int n);
+
+    explicit Fibo(long int n);
+
+    explicit Fibo(unsigned long int n);
+
+    explicit Fibo(long long n);
+
+    explicit Fibo(unsigned long long n);
+
+    explicit Fibo(char a) = delete;
 
     [[nodiscard]] size_t length() const;
 
@@ -34,6 +50,7 @@ public:
     friend bool operator<(Fibo const &fibo1, Fibo const &fibo2);
 
     friend bool operator==(Fibo const &fibo1, Fibo const &fibo2);
+
 };
 
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo);

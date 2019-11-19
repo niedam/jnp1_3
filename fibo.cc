@@ -1,4 +1,5 @@
 #include "fibo.h"
+#include <cassert>
 
 using boost::dynamic_bitset;
 using std::min;
@@ -142,9 +143,14 @@ namespace {
 
 Fibo::Fibo() : mask(1, false) {}
 
-Fibo::Fibo(const std::string &str) : mask(str) {
+Fibo::Fibo(const std::string &str) : mask(str) { // Asserts if str contains other character than '0' or '1'.
+    size_t length = mask.size();
+    assert(length > 0); // Proper Fibonacci number has size at least 1.
+    assert(length == 1 || mask[length - 1]); // Proper Fibonacci number does not have leading zeros.
     normalize(mask);
 }
+
+Fibo::Fibo(const char *str) : Fibo((std::string) str) {}
 
 Fibo::Fibo(short int n) : Fibo((unsigned long long) n) {}
 

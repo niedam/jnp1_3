@@ -15,6 +15,8 @@ public:
 
     explicit Fibo(const std::string &str);
 
+    explicit Fibo(const char *str);
+
     explicit Fibo(short int n);
 
     explicit Fibo(unsigned short int n);
@@ -32,6 +34,8 @@ public:
     explicit Fibo(unsigned long long n);
 
     explicit Fibo(char a) = delete;
+
+    explicit Fibo(bool b) = delete;
 
     [[nodiscard]] size_t length() const;
 

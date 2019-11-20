@@ -16,4 +16,20 @@ int main() {
         }
         cout << " skonczylem" << endl;
     }
+
+    srand(1231);
+    for (int i = 0; i < 1000000; i++) {
+        long long a = rand(), b = rand();
+
+        Fibo aa = a;
+        if (aa + Fibo(b) != Fibo(a + b)) {
+            cout << "zle randy: " << a << " + " << b << endl;
+            return 1;
+        }
+        aa += aa;
+        if (aa != Fibo(a + a)) {
+            cout << "zle randy: " << a << " += " << a << endl;
+            return 1;
+        }
+    }
 }

@@ -6,19 +6,19 @@ using std::min;
 using std::max;
 
 namespace {
-    /** @brief Erases leading zeros from bitset.
-     * @param mask[in,out]          - bitset.
+    /** @brief Erases leading zeros from Fibonacci number.
+     * @param mask[in,out]          - given Fibonacci number.
      */
     void eraseLeadingZeros(dynamic_bitset<> &mask) {
-        size_t size = mask.size();
+        size_t length = mask.size();
 
-        // mask is proper Fibonacci number (not normalized) so size > 0.
-        size_t mostSignificantBitPos = size - 1;
+        // mask is proper Fibonacci number (not normalized) so length > 0.
+        size_t mostSignificantBitPos = length - 1;
         while (mostSignificantBitPos > 0 && !mask[mostSignificantBitPos]) {
             mostSignificantBitPos--;
         }
 
-        if (mostSignificantBitPos + 1 < size) {
+        if (mostSignificantBitPos + 1 < length) {
             mask.resize(mostSignificantBitPos + 1);
         }
     }
@@ -31,8 +31,8 @@ namespace {
      * @param position[in]          - position described above.
      */
     void normalizeOnPosition(dynamic_bitset<> &mask, size_t position) {
-        size_t size = mask.size();
-        assert(position < size);
+        size_t length = mask.size();
+        assert(position < length);
         assert(!mask[position + 1]);
         assert(mask[position]);
         assert(position == 0 || mask[position - 1]);
@@ -43,8 +43,8 @@ namespace {
         }
 
         size_t addBitPos = position + 1;
-        while (addBitPos < size) {
-            if (addBitPos + 1 < size && mask[addBitPos + 1]) {
+        while (addBitPos < length) {
+            if (addBitPos + 1 < length && mask[addBitPos + 1]) {
                 mask[addBitPos + 1] = false;
                 addBitPos += 2;
             } else {
@@ -52,9 +52,7 @@ namespace {
                 return;
             }
         }
-        if (addBitPos == size) {
-            mask.push_back(true);
-        }
+        mask.push_back(true);
     }
 
     /** @brief Normalizes and erases leading zeros in Fibonacci number.
@@ -72,20 +70,20 @@ namespace {
         eraseLeadingZeros(mask);
     }
 
-    /** @brief Adds f(@position + 2) Fibonacci number to @p mask Fibonacci number.
+    /** @brief Adds f(@p position + 2) Fibonacci number to @p mask Fibonacci number.
      * @param mask[in,out]          - given Fibonacci number;
      * @param position[in]          - position described above.
      */
     void addSingleBit(dynamic_bitset<> &mask, size_t position) {
-        size_t size = mask.size();
-        if (size <= position) {
+        size_t length = mask.size();
+        if (length <= position) {
             mask.resize(position + 1);
-            size = position + 1;
+            length = position + 1;
         }
 
         if (!mask[position]) {
             mask[position] = true;
-            if (position + 1 < size && mask[position + 1]) {
+            if (position + 1 < length && mask[position + 1]) {
                 normalizeOnPosition(mask, position + 1);
             } else if (position > 0 && mask[position - 1]) {
                 normalizeOnPosition(mask, position);
@@ -95,12 +93,12 @@ namespace {
 
         // mask[position] = true, so we have situation "...020x.." and we will change it to "...100(x+1)..."
         mask[position] = false;
-        if (position + 1 == size) {
+        if (position + 1 == length) {
             mask.push_back(true);
-            size++;
+            length++;
         } else {
             mask[position + 1] = true;
-            if (position + 2 < size && mask[position + 2]) {
+            if (position + 2 < length && mask[position + 2]) {
                 normalizeOnPosition(mask, position + 2);
             }
         }
@@ -214,9 +212,9 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
     // and "...0120x..." into "...1010x...". One can prove that making these changes we will encounter only
     // situations that will require those changes.
     mask.push_back(false);
-    bool addAdditionalBit = false; // Variable that tells that we should add bit on current position (x+1) described above.
-    int position;
-    for (position = mask.size() - 2; position >= 0; position--) {
+    bool addAdditionalBit = false; // Variable that tells that we should add bit on current position ((x+1) described above).
+    long long position;
+    for (position = (long long) mask.size() - 2; position >= 0; position--) {
         if (mask[position]) {
             if (mask[position + 1]) {
                 mask[position + 2] = true;
@@ -240,7 +238,7 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
     normalize(mask);
 
     // If we have leftover (addAdditionalBit == true) from for above we are adding this here.
-    // mask[-1] would be Fibonacci number F(1) = 1 and mask[-2] would be F(2) = 0.
+    // mask[-1] would be Fibonacci number F(1) = 1 and mask[-2] would be F(0) = 0.
     if (addAdditionalBit && position == -1) {
         addSingleBit(mask, 0);
     }
@@ -249,10 +247,10 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
 }
 
 Fibo &Fibo::operator|=(const Fibo &fibo) {
-    size_t length_fibo = fibo.mask.size();
-    size_t length_max = max(this->mask.size(), length_fibo);
-    this->mask.resize(length_max); // TODO zapytac p. Peczarskiego
-    for (size_t i = 0; i < length_fibo; i++) {
+    size_t lengthFibo = fibo.mask.size();
+    size_t lengthMax = max(this->mask.size(), lengthFibo);
+    this->mask.resize(lengthMax); // TODO zapytac p. Peczarskiego
+    for (size_t i = 0; i < lengthFibo; i++) {
         this->mask[i] |= fibo.mask[i];
     }
     normalize(mask);
@@ -260,21 +258,21 @@ Fibo &Fibo::operator|=(const Fibo &fibo) {
 }
 
 Fibo &Fibo::operator&=(const Fibo &fibo) {
-    size_t length = min(this->mask.size(), fibo.mask.size());
-    for (size_t i = 0; i < length; i++) {
+    size_t lengthMin = min(this->mask.size(), fibo.mask.size());
+    for (size_t i = 0; i < lengthMin; i++) {
         this->mask[i] &= fibo.mask[i];
     }
-    this->mask.resize(length);
+    this->mask.resize(lengthMin);
     eraseLeadingZeros(this->mask);
 
     return *this;
 }
 
 Fibo &Fibo::operator^=(const Fibo &fibo) {
-    size_t length_fibo = fibo.mask.size();
-    size_t length_max = max(this->mask.size(), length_fibo);
-    this->mask.resize(length_max);
-    for (size_t i = 0; i < length_fibo; i++) {
+    size_t lengthFibo = fibo.mask.size();
+    size_t lengthMax = max(this->mask.size(), lengthFibo);
+    this->mask.resize(lengthMax);
+    for (size_t i = 0; i < lengthFibo; i++) {
         this->mask[i] ^= fibo.mask[i];
     }
     normalize(mask);
@@ -288,17 +286,17 @@ Fibo &Fibo::operator<<=(unsigned int n) {
 }
 
 bool operator<(Fibo const &fibo1, Fibo const &fibo2) {
-    if (fibo1.mask.size() < fibo2.mask.size())
-        return true;
-    else if (fibo1.mask.size() > fibo2.mask.size())
-        return false;
-    return (fibo1.mask < fibo2.mask);
+    size_t length1 = fibo1.mask.size();
+    size_t length2 = fibo2.mask.size();
+
+    if (length1 == length2) {
+        return (fibo1.mask < fibo2.mask);
+    }
+    return length1 < length2;
 }
 
 bool operator==(Fibo const &fibo1, Fibo const &fibo2) {
-    if (fibo1.mask.size() != fibo2.mask.size())
-        return false;
-    return (fibo1.mask == fibo2.mask);
+    return fibo1.mask == fibo2.mask;
 }
 
 std::ostream &operator<<(std::ostream &os, const Fibo &fibo) {
@@ -307,11 +305,11 @@ std::ostream &operator<<(std::ostream &os, const Fibo &fibo) {
 }
 
 const Fibo &Zero() {
-    static Fibo *fibo = new Fibo();
-    return *fibo;
+    static Fibo fibo;
+    return fibo;
 }
 
 const Fibo &One() {
-    static Fibo *fibo = new Fibo(1ULL);
-    return *fibo;
+    static Fibo fibo(1ULL);
+    return fibo;
 }

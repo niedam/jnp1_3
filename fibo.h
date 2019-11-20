@@ -57,8 +57,6 @@ public:
 
 };
 
-std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
-
 bool operator<(Fibo const &fibo1, Fibo const &fibo2);
 
 bool operator==(Fibo const &fibo1, Fibo const &fibo2);

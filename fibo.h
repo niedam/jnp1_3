@@ -51,15 +51,15 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
 
-    friend bool operator<(Fibo const &fibo1, Fibo const &fibo2);
+    friend bool operator<(const Fibo &fibo1, const Fibo &fibo2);
 
-    friend bool operator==(Fibo const &fibo1, Fibo const &fibo2);
+    friend bool operator==(const Fibo &fibo1, const Fibo &fibo2);
 
 };
 
-bool operator<(Fibo const &fibo1, Fibo const &fibo2);
+bool operator<(const Fibo &fibo1, const Fibo &fibo2);
 
-bool operator==(Fibo const &fibo1, Fibo const &fibo2);
+bool operator==(const Fibo &fibo1, const Fibo &fibo2);
 
 const Fibo &Zero();
 

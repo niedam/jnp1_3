@@ -11,8 +11,8 @@ namespace {
      */
     void eraseLeadingZeros(dynamic_bitset<> &mask) {
         size_t length = mask.size();
+        assert(length > 0); // mask is proper Fibonacci number (not normalized) so length > 0.
 
-        // mask is proper Fibonacci number (not normalized) so length > 0.
         size_t mostSignificantBitPos = length - 1;
         while (mostSignificantBitPos > 0 && !mask[mostSignificantBitPos]) {
             mostSignificantBitPos--;
@@ -44,6 +44,7 @@ namespace {
 
         size_t addBitPos = position + 1;
         while (addBitPos < length) {
+            assert(!mask[position]);
             if (addBitPos + 1 < length && mask[addBitPos + 1]) {
                 mask[addBitPos + 1] = false;
                 addBitPos += 2;
@@ -60,8 +61,10 @@ namespace {
      * @param mask[in,out]          - given Fibonacci number.
      */
     void normalize(dynamic_bitset<> &mask) {
-        // mask is proper Fibonacci number (not normalized) so size > 0.
-        for (size_t i = mask.size() - 1; i > 0; i--) {
+        size_t length = mask.size();
+        assert(length > 0); // mask is proper Fibonacci number (not normalized) so length > 0.
+
+        for (size_t i = length - 1; i > 0; i--) {
             if (mask[i] && mask[i - 1]) {
                 normalizeOnPosition(mask, i);
             }
@@ -97,6 +100,7 @@ namespace {
             mask.push_back(true);
             length++;
         } else {
+            assert(!mask[position + 1]);
             mask[position + 1] = true;
             if (position + 2 < length && mask[position + 2]) {
                 normalizeOnPosition(mask, position + 2);
@@ -109,6 +113,7 @@ namespace {
         // x to (x+1) and we normalize if necessary.
         while (position >= 2) {
             position -= 2;
+            assert(!mask[position + 1]);
             if (!mask[position]) {
                 mask[position] = true;
                 if (position > 0 && mask[position - 1]) {
@@ -131,6 +136,7 @@ namespace {
 
         // f1 Fibonacci is equal to 1, so we need to add 1.
         // It is guaranteed that mask[1] = false.
+        assert(length > 0 || !mask[1]);
         if (!mask[0]) {
             mask[0] = true;
         } else {
@@ -217,6 +223,7 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
     for (position = (long long) mask.size() - 2; position >= 0; position--) {
         if (mask[position]) {
             if (mask[position + 1]) {
+                assert(!mask[position + 2]);
                 mask[position + 2] = true;
                 mask[position + 1] = false;
             } else {
@@ -228,6 +235,7 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
             // We are guaranteed that there is no '2' on position - 1, so we can decrease variable position.
             // We have to decrease variable position here because we set
             // variable addAdditionalBit to true above which would be wrong without this.
+            assert(position < 1 || !mask[position - 1]);
             position--;
         } else {
             mask[position] = addAdditionalBit;
@@ -285,7 +293,7 @@ Fibo &Fibo::operator<<=(unsigned int n) {
     return *this;
 }
 
-bool operator<(Fibo const &fibo1, Fibo const &fibo2) {
+bool operator<(const Fibo &fibo1, const Fibo &fibo2) {
     size_t length1 = fibo1.mask.size();
     size_t length2 = fibo2.mask.size();
 
@@ -295,7 +303,7 @@ bool operator<(Fibo const &fibo1, Fibo const &fibo2) {
     return length1 < length2;
 }
 
-bool operator==(Fibo const &fibo1, Fibo const &fibo2) {
+bool operator==(const Fibo &fibo1, const Fibo &fibo2) {
     return fibo1.mask == fibo2.mask;
 }
 
@@ -305,11 +313,11 @@ std::ostream &operator<<(std::ostream &os, const Fibo &fibo) {
 }
 
 const Fibo &Zero() {
-    static Fibo fibo;
+    static const Fibo fibo;
     return fibo;
 }
 
 const Fibo &One() {
-    static Fibo fibo(1ULL);
+    static const Fibo fibo(1ULL);
     return fibo;
 }

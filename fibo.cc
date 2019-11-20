@@ -193,7 +193,7 @@ Fibo::Fibo(unsigned long long n) : mask(1, false) {
     }
 }
 
-size_t Fibo::length() const {
+[[nodiscard]] size_t Fibo::length() const {
     return mask.size();
 }
 

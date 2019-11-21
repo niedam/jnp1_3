@@ -216,7 +216,7 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
         size_t length = fibo.mask.size();
         for (size_t i = 0; i < length; i++) {
             if (fibo.mask[i]) {
-                addSingleBit(this->mask, i);
+                addSingleBit(mask, i);
             }
         }
         return *this;
@@ -266,40 +266,40 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
 
 Fibo &Fibo::operator|=(const Fibo &fibo) {
     size_t lengthFibo = fibo.mask.size();
-    size_t lengthMax = max(this->mask.size(), lengthFibo);
-    this->mask.resize(lengthMax);
+    size_t lengthMax = max(mask.size(), lengthFibo);
+    mask.resize(lengthMax);
     for (size_t i = 0; i < lengthFibo; i++) {
-        this->mask[i] |= fibo.mask[i];
+        mask[i] |= fibo.mask[i];
     }
     normalize(mask);
     return *this;
 }
 
 Fibo &Fibo::operator&=(const Fibo &fibo) {
-    size_t lengthMin = min(this->mask.size(), fibo.mask.size());
+    size_t lengthMin = min(mask.size(), fibo.mask.size());
     for (size_t i = 0; i < lengthMin; i++) {
-        this->mask[i] &= fibo.mask[i];
+        mask[i] &= fibo.mask[i];
     }
-    this->mask.resize(lengthMin);
-    eraseLeadingZeros(this->mask);
+    mask.resize(lengthMin);
+    eraseLeadingZeros(mask);
 
     return *this;
 }
 
 Fibo &Fibo::operator^=(const Fibo &fibo) {
     size_t lengthFibo = fibo.mask.size();
-    size_t lengthMax = max(this->mask.size(), lengthFibo);
-    this->mask.resize(lengthMax);
+    size_t lengthMax = max(mask.size(), lengthFibo);
+    mask.resize(lengthMax);
     for (size_t i = 0; i < lengthFibo; i++) {
-        this->mask[i] ^= fibo.mask[i];
+        mask[i] ^= fibo.mask[i];
     }
     normalize(mask);
     return *this;
 }
 
 Fibo &Fibo::operator<<=(unsigned int n) {
-    this->mask.resize(this->mask.size() + n);
-    this->mask <<= n;
+    mask.resize(mask.size() + n);
+    mask <<= n;
     return *this;
 }
 

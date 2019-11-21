@@ -5,6 +5,11 @@
 #include <boost/dynamic_bitset.hpp>
 #include <boost/operators.hpp>
 
+/**
+ * Some operators are inherited from Boost.Operators:
+ * f1 + f2, f1 & f2, f1 | f2, f1 ^ f2, f1 << n, f1 op f2
+ */
+
 class Fibo : boost::totally_ordered<Fibo>,
         boost::addable<Fibo>,
         boost::bitwise<Fibo>,
@@ -49,42 +54,42 @@ public:
 
     [[nodiscard]] size_t length() const;
 
-    /** Overload addition assignment
+    /** @brief Overload addition assignment
      * Set value to sum of this and another Fibo number
      * @param[in] fibo - another Fibo number
      * @return Reference to current Fibo number
      */
     Fibo &operator+=(const Fibo &fibo);
 
-    /** Overload "fi-bitwise AND" assignment
+    /** @brief Overload "fi-bitwise AND" assignment
      * Set value to "fi-bitwise AND" of this and another Fibo number
      * @param[in] fibo - another Fibo number
      * @return Reference to current Fibo number
      */
     Fibo &operator&=(const Fibo &fibo);
 
-    /** Overload "fi-bitwise OR" assignment
+    /** @brief Overload "fi-bitwise OR" assignment
      * Set value to "fi-bitwise OR" of this and another Fibo number
      * @param[in] fibo - another Fibo number
      * @return Reference to current Fibo number
      */
     Fibo &operator|=(const Fibo &fibo);
 
-    /** Overload "fi-bitwise XOR" assignment
+    /** @brief Overload "fi-bitwise XOR" assignment
      * Set value to "fi-bitwise XOR" of this and another Fibo number
      * @param[in] fibo - another Fibo number
      * @return Reference to current Fibo number
      */
     Fibo &operator^=(const Fibo &fibo);
 
-    /** Overload "fi-bitwise left shift" assignment
+    /** @brief Overload "fi-bitwise left shift" assignment
      * Set value to "fi-bitwise left shift" of this and another Fibo number
      * @param[in] n - number of places to shift
      * @return Reference to current Fibo number
      */
     Fibo &operator<<=(unsigned int n);
 
-    /** Less than Fibo numbers operator
+    /** @brief Less than Fibo numbers operator
      * Checks if fibo1 < fibo2
      * @param[in] fibo1 - Fibo number
      * @param[in] fibo2 - Fibo number
@@ -92,7 +97,7 @@ public:
      */
     friend bool operator<(const Fibo &fibo1, const Fibo &fibo2);
 
-    /** Equal Fibo numbers operator
+    /** @brief Equal Fibo numbers operator
      * Checks if two Fibo numbers are equal
      * @param[in] fibo1 - Fibo number
      * @param[in] fibo2 - Fibo number
@@ -100,7 +105,7 @@ public:
      */
     friend bool operator==(const Fibo &fibo1, const Fibo &fibo2);
 
-    /** Output operator for Fibo numbers
+    /** @brief Output operator for Fibo numbers
      * Print Fibo number through stream
      * @param[out] os - output stream
      * @param[in] fibo - Fibo number to print
@@ -109,12 +114,12 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const Fibo &fibo);
 };
 
-/** Reference to immutable Fibo(0)
+/** @brief Reference to immutable Fibo(0)
  * @return Reference to const Fibo(0)
  */
 const Fibo &Zero();
 
-/** Reference to immutable Fibo(1)
+/** @brief Reference to immutable Fibo(1)
  * @return Reference to const Fibo(1)
  */
 const Fibo &One();

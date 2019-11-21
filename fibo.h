@@ -27,13 +27,23 @@ public:
 
     explicit Fibo(long int n);
 
-    Fibo(unsigned long int n);
+    explicit Fibo(unsigned long int n);
 
     explicit Fibo(long long n);
 
-    explicit Fibo(unsigned long long n);
+    Fibo(unsigned long long n);
 
     explicit Fibo(char a) = delete;
+
+    explicit Fibo(char16_t a) = delete;
+
+    explicit Fibo(char32_t a) = delete;
+
+    explicit Fibo(wchar_t a) = delete;
+
+    explicit Fibo(signed char a) = delete;
+
+    explicit Fibo(unsigned char a) = delete;
 
     explicit Fibo(bool b) = delete;
 

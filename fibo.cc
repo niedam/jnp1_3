@@ -156,19 +156,29 @@ Fibo::Fibo(const std::string &str) : mask(str) { // Asserts if str contains othe
 
 Fibo::Fibo(const char *str) : Fibo((std::string) str) {}
 
-Fibo::Fibo(short int n) : Fibo((unsigned long long) n) {}
+// Asserts if any signed type gets a negative value.
+
+Fibo::Fibo(short int n) : Fibo((unsigned long long) n) {
+    assert(n >= 0); // The negative numbers do not have representation in Fibonacci code.
+}
 
 Fibo::Fibo(unsigned short int n) : Fibo((unsigned long long) n) {}
 
-Fibo::Fibo(int n) : Fibo((unsigned long long) n) {}
+Fibo::Fibo(int n) : Fibo((unsigned long long) n) {
+    assert(n >= 0); // The negative numbers do not have representation in Fibonacci code.
+}
 
 Fibo::Fibo(unsigned int n) : Fibo((unsigned long long) n) {}
 
-Fibo::Fibo(long int n) : Fibo((unsigned long long) n) {}
+Fibo::Fibo(long int n) : Fibo((unsigned long long) n) {
+    assert(n >= 0); // The negative numbers do not have representation in Fibonacci code.
+}
 
 Fibo::Fibo(unsigned long int n) : Fibo((unsigned long long) n) {}
 
-Fibo::Fibo(long long n) : Fibo((unsigned long long) n) {}
+Fibo::Fibo(long long n) : Fibo((unsigned long long) n) {
+    assert(n >= 0); // The negative numbers do not have representation in Fibonacci code.
+}
 
 Fibo::Fibo(unsigned long long n) : mask(1, false) {
     unsigned long long x = 1, y = 1, z;
@@ -257,7 +267,7 @@ Fibo &Fibo::operator+=(const Fibo &fibo) {
 Fibo &Fibo::operator|=(const Fibo &fibo) {
     size_t lengthFibo = fibo.mask.size();
     size_t lengthMax = max(this->mask.size(), lengthFibo);
-    this->mask.resize(lengthMax); // TODO zapytac p. Peczarskiego
+    this->mask.resize(lengthMax);
     for (size_t i = 0; i < lengthFibo; i++) {
         this->mask[i] |= fibo.mask[i];
     }
